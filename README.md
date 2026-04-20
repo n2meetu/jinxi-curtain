@@ -1,6 +1,6 @@
 # 今喜窗帘
 
-![今喜窗帘](assets/logo.png)
+<img src="assets/logo.png" alt="今喜窗帘" width="230" />
 
 **窗帘源头工厂 · 专注软装定制 · 没有中间商**
 
