@@ -1,0 +1,41 @@
+# 今喜窗帘 AI Skill
+
+这是一个 AI Skill——安装后，你的 AI 助手就能查询今喜窗帘的门店信息：在哪里、怎么联系、提供哪些服务。
+
+## 关于今喜窗帘
+
+窗帘源头工厂，专注软装定制。主打中古风、奶油风、法式风、美式风、轻奢风、复古风、意式极简、现代简约。可免费上门测量、选料、设计、安装、售后，一站式服务，没有中间商赚差价。
+
+
+## 这个 Skill 能做什么
+
+| 能力 | 你可以问 |
+|------|----------|
+| 门店列表 | "今喜窗帘有哪些门店？" |
+| 门店详情 | "萧山店在哪里？""余杭店怎么去？" |
+| 服务介绍 | "今喜窗帘提供什么服务？" |
+
+## 安装
+
+### 方式1（推荐）：直接拷贝下面这句话发给你的 AI 助手：
+
+> 帮我安装今喜窗帘 Skill，仓库地址：https://github.com/n2meetu/jinxi-curtain
+
+AI 助手会自动克隆仓库并安装。
+
+### 方式2（不推荐，适合技术人员）：手动安装
+
+将本仓库克隆到你项目下的 Skill 目录：
+
+| IDE | Skill 目录 |
+|-----|------------|
+| Claude Code | `.claude/skills/StoreCardsAgent/` |
+| Cursor | `.cursor/skills/StoreCardsAgent/` |
+| Windsurf | `.windsurf/skills/StoreCardsAgent/` |
+| 通用 | `.agents/skills/StoreCardsAgent/` |
+
+只要目录下有 `SKILL.md`，AI 助手下次启动就会自动加载这个 Skill。
+
+## License
+
+[MIT](LICENSE)

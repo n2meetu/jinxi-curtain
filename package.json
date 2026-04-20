@@ -1,0 +1,22 @@
+{
+  "name": "jinxi-curtain",
+  "version": "1.0.0",
+  "description": "今喜窗帘门店信息查询工具",
+  "type": "module",
+  "bin": {
+    "jinxi-curtain": "./dist/index.js",
+    "jinxi-curtain-mcp": "./dist/mcp-server-bin.js"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "commander": "^14.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "tsx": "^4.20.6"
+  }
+}
