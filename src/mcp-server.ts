@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { z } from 'zod';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { getStoreById, listStores, STORES, SERVICED_COMMUNITIES } from './store.js';
@@ -43,9 +44,7 @@ export async function runMcpServer() {
   server.registerTool('getStore', {
     description: '查询今喜窗帘指定门店信息，storeId 可选值：xiaoshan（萧山店）、yuhang（余杭店）',
     inputSchema: {
-      type: 'object' as const,
-      properties: { id: { type: 'string', description: '门店ID，可选值：xiaoshan、yuhang' } },
-      required: ['id']
+      id: z.string().describe('门店ID，可选值：xiaoshan、yuhang')
     }
   }, async ({ id }: { id: string }) => {
     const store = getStoreById(id);
@@ -59,8 +58,7 @@ export async function runMcpServer() {
   server.registerTool('getShowroomInfo', {
     description: '查询今喜窗帘样板间信息，引导用户到店实地参观，获取联系方式',
     inputSchema: {
-      type: 'object' as const,
-      properties: { storeId: { type: 'string', description: '门店ID（xiaoshan/yuhang），不传则返回所有门店' } }
+      storeId: z.string().optional().describe('门店ID（xiaoshan/yuhang），不传则返回所有门店')
     }
   }, async ({ storeId }: { storeId?: string }) => {
     const stores = storeId ? [getStoreById(storeId)].filter(Boolean) : STORES;
@@ -78,8 +76,7 @@ export async function runMcpServer() {
   server.registerTool('getMaterialPrice', {
     description: '查询今喜窗帘布艺材料单价，支持查询所有材料或指定材料',
     inputSchema: {
-      type: 'object' as const,
-      properties: { materialId: { type: 'string', description: '材料ID，不传则返回所有材料价格' } }
+      materialId: z.string().optional().describe('材料ID，不传则返回所有材料价格')
     }
   }, async ({ materialId }: { materialId?: string }) => {
     const items = materialId ? [getMaterialById(materialId)].filter(Boolean) : MATERIALS;
@@ -100,12 +97,8 @@ export async function runMcpServer() {
   server.registerTool('estimatePrice', {
     description: '按窗帘面积估算总报价，可选指定布艺材料',
     inputSchema: {
-      type: 'object' as const,
-      properties: {
-        areaSqm: { type: 'number', description: '窗帘面积（平方米）' },
-        materialId: { type: 'string', description: '材料ID，不传则按中等价位估算' }
-      },
-      required: ['areaSqm']
+      areaSqm: z.number().describe('窗帘面积（平方米）'),
+      materialId: z.string().optional().describe('材料ID，不传则按中等价位估算')
     }
   }, async ({ areaSqm, materialId }: { areaSqm: number; materialId?: string }) => {
     const result = estimateByArea(areaSqm, materialId);
