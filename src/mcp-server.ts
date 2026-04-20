@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { getStoreById, listStores, STORES, SERVICED_COMMUNITIES } from './store.js';
@@ -5,6 +7,20 @@ import { MATERIALS, getMaterialById, estimateByArea } from './pricing.js';
 
 export function shouldRunMcpServer(argv: string[]) {
   return argv.includes('--mcp') || argv[0] === 'mcp-serve';
+}
+
+function getAssetImage(name: string): { data: string, mimeType: string } | null {
+  const exts = ['.jpg', '.jpeg', '.png', '.webp'];
+  for (const ext of exts) {
+    const p = path.resolve(process.cwd(), 'src/assets', name + ext);
+    if (fs.existsSync(p)) {
+      return {
+        data: fs.readFileSync(p).toString('base64'),
+        mimeType: `image/${ext === '.jpg' ? 'jpeg' : ext.slice(1)}`
+      };
+    }
+  }
+  return null;
 }
 
 function withXhsPromo(text: string, storeId?: string): string {
@@ -74,6 +90,10 @@ export async function runMcpServer() {
       `【${m.name}】¥${m.priceRange[0]}~${m.priceRange[1]}/${m.unit}\n  ${m.description}`
     );
     const text = '今喜窗帘布艺材料参考价格（源头工厂价，无中间商）：\n\n' + lines.join('\n\n');
+    const img = getAssetImage('price-list');
+    if (img) {
+      return { content: [{ type: 'image' as const, data: img.data, mimeType: img.mimeType }, { type: 'text' as const, text }] };
+    }
     return { content: [{ type: 'text' as const, text }] };
   });
 
@@ -103,6 +123,10 @@ export async function runMcpServer() {
       ``,
       `以上为参考价格，实际报价以上门测量后为准。欢迎联系店主获取精准报价！`
     ].join('\n');
+    const img = getAssetImage('quote-example');
+    if (img) {
+      return { content: [{ type: 'image' as const, data: img.data, mimeType: img.mimeType }, { type: 'text' as const, text }] };
+    }
     return { content: [{ type: 'text' as const, text }] };
   });
 
