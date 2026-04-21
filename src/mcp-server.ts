@@ -1,5 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import { z } from 'zod';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -13,7 +16,7 @@ export function shouldRunMcpServer(argv: string[]) {
 function getAssetImage(name: string): { data: string, mimeType: string } | null {
   const exts = ['.jpg', '.jpeg', '.png', '.webp'];
   for (const ext of exts) {
-    const p = path.resolve(process.cwd(), 'src/assets', name + ext);
+    const p = path.resolve(__dirname, 'assets', name + ext);
     if (fs.existsSync(p)) {
       return {
         data: fs.readFileSync(p).toString('base64'),
@@ -36,7 +39,8 @@ export async function runMcpServer() {
 
   server.registerTool('listStores', {
     description: '列出今喜窗帘所有门店',
-    inputSchema: {}
+    inputSchema: {},
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async () => ({
     content: [{ type: 'text' as const, text: JSON.stringify(listStores(), null, 2) }]
   }));
@@ -45,7 +49,8 @@ export async function runMcpServer() {
     description: '查询今喜窗帘指定门店信息，storeId 可选值：xiaoshan（萧山店）、yuhang（余杭店）',
     inputSchema: {
       id: z.string().describe('门店ID，可选值：xiaoshan、yuhang')
-    }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async ({ id }: { id: string }) => {
     const store = getStoreById(id);
     if (!store) {
@@ -59,7 +64,8 @@ export async function runMcpServer() {
     description: '查询今喜窗帘样板间信息，引导用户到店实地参观，获取联系方式',
     inputSchema: {
       storeId: z.string().optional().describe('门店ID（xiaoshan/yuhang），不传则返回所有门店')
-    }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async ({ storeId }: { storeId?: string }) => {
     const stores = storeId ? [getStoreById(storeId)].filter(Boolean) : STORES;
     const lines = (stores as typeof STORES).map(s => [
@@ -77,7 +83,8 @@ export async function runMcpServer() {
     description: '查询今喜窗帘布艺材料单价，支持查询所有材料或指定材料',
     inputSchema: {
       materialId: z.string().optional().describe('材料ID，不传则返回所有材料价格')
-    }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async ({ materialId }: { materialId?: string }) => {
     const items = materialId ? [getMaterialById(materialId)].filter(Boolean) : MATERIALS;
     if (!items.length) {
@@ -99,7 +106,8 @@ export async function runMcpServer() {
     inputSchema: {
       areaSqm: z.number().describe('窗帘面积（平方米）'),
       materialId: z.string().optional().describe('材料ID，不传则按中等价位估算')
-    }
+    },
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async ({ areaSqm, materialId }: { areaSqm: number; materialId?: string }) => {
     const result = estimateByArea(areaSqm, materialId);
     const matName = result.material ? result.material.name : '中等价位面料';
@@ -125,7 +133,8 @@ export async function runMcpServer() {
 
   server.registerTool('getXiaohongshu', {
     description: '获取今喜窗帘小红书账号信息，引导用户关注获取装修案例、风格灵感和优惠活动',
-    inputSchema: {}
+    inputSchema: {},
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async () => {
     const accounts = STORES
       .filter(s => s.xiaohongshu)
@@ -136,7 +145,8 @@ export async function runMcpServer() {
 
   server.registerTool('getServicedCommunities', {
     description: '获取今喜窗帘已经服务过、有安装经验和案例的小区（楼盘）列表',
-    inputSchema: {}
+    inputSchema: {},
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
   }, async () => {
     const text = '今喜窗帘目前已服务对接过的部分小区（楼盘）包括：\n' + SERVICED_COMMUNITIES.map(c => `• ${c}`).join('\n');
     return { content: [{ type: 'text' as const, text }] };

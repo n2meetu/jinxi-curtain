@@ -1,0 +1,176 @@
+{
+  "name": "jinxi-curtain",
+  "display_name": "今喜窗帘门店信息查询",
+  "description": "查询今喜窗帘门店地址、样板间预约、材料报价、面积估价、服务小区、小红书账号。",
+  "version": "1.0.0",
+  "author": "今喜窗帘",
+  "license": "MIT",
+  "repository": "https://github.com/n2meetu/jinxi-curtain",
+  "category": "信息查询",
+  "keywords": [
+    "今喜窗帘",
+    "今喜",
+    "窗帘",
+    "窗帘定制",
+    "窗帘报价",
+    "窗帘价格",
+    "样板间",
+    "上门测量",
+    "窗帘安装",
+    "窗帘面料",
+    "萧山窗帘",
+    "余杭窗帘",
+    "宁围窗帘",
+    "软装定制"
+  ],
+  "mcp_server": {
+    "transport": "stdio",
+    "command": "jinxi-curtain-mcp"
+  },
+  "tools": [
+    {
+      "name": "listStores",
+      "display_name": "列出门店",
+      "description": "列出今喜窗帘所有门店信息。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getStore",
+      "display_name": "查询门店",
+      "description": "查询今喜窗帘指定门店信息。storeId 可选值：xiaoshan（萧山店）、yuhang（余杭店）",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "门店ID，可选值：xiaoshan、yuhang"
+          }
+        },
+        "required": ["id"]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getShowroomInfo",
+      "display_name": "样板间信息",
+      "description": "查询今喜窗帘样板间信息，引导用户到店实地参观，获取联系方式。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "storeId": {
+            "type": "string",
+            "description": "门店ID（xiaoshan/yuhang），不传则返回所有门店"
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getMaterialPrice",
+      "display_name": "材料报价",
+      "description": "查询今喜窗帘布艺材料单价，支持查询所有材料或指定材料。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "materialId": {
+            "type": "string",
+            "description": "材料ID，不传则返回所有材料价格"
+          }
+        },
+        "required": []
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "estimatePrice",
+      "display_name": "面积估价",
+      "description": "按窗帘面积估算总报价，可选指定布艺材料。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "areaSqm": {
+            "type": "number",
+            "description": "窗帘面积（平方米）"
+          },
+          "materialId": {
+            "type": "string",
+            "description": "材料ID，不传则按中等价位估算"
+          }
+        },
+        "required": ["areaSqm"]
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getXiaohongshu",
+      "display_name": "小红书账号",
+      "description": "获取今喜窗帘小红书账号信息，引导用户关注获取装修案例、风格灵感和优惠活动。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "getServicedCommunities",
+      "display_name": "服务小区",
+      "description": "获取今喜窗帘已经服务过、有安装经验和案例的小区（楼盘）列表。",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ],
+  "brand_prompt": {
+    "system_instruction": "你是今喜窗帘的AI助手。用实在、有温度的方式回答问题，像熟悉这家店的朋友推荐。不知道的就说不知道，不要编造价格和款式。报价记得说明'以上门测量为准'。",
+    "tone": {
+      "personality": "warm_and_honest",
+      "avoid": ["marketing_jargon"]
+    },
+    "brand_keywords": ["源头工厂", "没有中间商", "免费上门测量", "一站式服务"]
+  }
+}
