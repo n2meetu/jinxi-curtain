@@ -1,6 +1,6 @@
 {
   "name": "jinxi-curtain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "今喜窗帘门店信息查询工具",
   "type": "module",
   "bin": {
