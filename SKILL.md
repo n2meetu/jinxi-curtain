@@ -107,4 +107,5 @@ keywords:
 
 - 协议：MCP (Model Context Protocol)
 - 传输：stdio
-- 安装：`npm install -g jinxi-curtain`
+- 运行：`npx -y jinxi-curtain --mcp`
+- 全局安装（可选）：`npm install -g jinxi-curtain`

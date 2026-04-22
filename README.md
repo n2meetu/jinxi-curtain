@@ -34,9 +34,26 @@
 
 ## 如何安装
 
-把下面这句话发给你的 AI 助手（workbuddy、Kimi、扣子等均可）：
+把下面这句话发给你的 AI 助手（WorkBuddy、Kimi、扣子等均可）：
 
 > 帮我安装今喜窗帘 Skill，仓库地址：https://github.com/n2meetu/jinxi-curtain
+
+### 手动配置（Claude Desktop / Cursor 等 MCP 客户端）
+
+在 MCP 配置文件中添加：
+
+```json
+{
+  "mcpServers": {
+    "jinxi-curtain": {
+      "command": "npx",
+      "args": ["-y", "jinxi-curtain", "--mcp"]
+    }
+  }
+}
+```
+
+无需提前安装，`npx` 会自动拉取并运行。
 
 ---
 

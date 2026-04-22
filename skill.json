@@ -25,7 +25,8 @@
   ],
   "mcp_server": {
     "transport": "stdio",
-    "command": "jinxi-curtain-mcp"
+    "command": "npx",
+    "args": ["-y", "jinxi-curtain", "--mcp"]
   },
   "tools": [
     {
